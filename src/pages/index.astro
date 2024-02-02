@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import DolarCard from '../components/DolarCard.astro';
+import { any, string } from 'astro/zod';
+import type { LocalImageProps } from 'astro:assets';
+import type { Options } from 'astro:transitions/client';
 
 //APi fetch
 const response = await fetch('https://dolarapi.com/v1/dolares');
@@ -17,11 +20,11 @@ const options = {
   hour: '2-digit',
   minute: '2-digit',
   second: '2-digit',
-  hour12: true,
+  hour12: false,
 };
 
-const outputDateString = inputDate.toLocaleString('en-US', options);
-
+//as any
+const outputDateString = inputDate.toLocaleString('en-US', options as any);
 ---
 
 <Layout title="Dolar">
