@@ -1,0 +1,79 @@
+---
+import Layout from '../layouts/Layout.astro';
+import DolarCard from '../components/DolarCard.astro';
+
+//APi fetch
+const response = await fetch('https://dolarapi.com/v1/dolares');
+const data = await response.json();
+
+//Conversion de fechafetch
+const inputDateString = data[0].fechaActualizacion;
+const inputDate = new Date(inputDateString);
+
+const options = {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hour12: true,
+};
+
+const outputDateString = inputDate.toLocaleString('en-US', options);
+
+---
+
+<Layout title="Dolar">
+	<main class="m-auto p-4 w-[800px] max-w-[calc(100% - 2rem)] text-white text-xl">
+		
+		<h1 class="text-6xl font-bold text-center mb-8">DOLAR<span class="text-gradient">Arg</span></h1>
+		
+		<ul role="list" class="link-card-grid">
+			<DolarCard
+				href="https://dolarhoy.com/subseccion/dolar-oficial"
+				title="Dolar Oficial"
+				compra={data[0].compra}
+				venta={data[0].venta}
+			/>
+			<DolarCard
+				href="https://dolarhoy.com/subseccion/dolar-blue"
+				title="Dolar Blue"
+				compra={data[1].compra}
+				venta={data[1].venta}
+			/>
+			<DolarCard
+				href="https://dolarhoy.com/cotizacion-dolar-tarjeta"
+				title="Dolar Tarjeta"
+				compra={data[6].compra}
+				venta={data[6].venta}
+			/>
+			<DolarCard
+				href="https://dolarhoy.com/seccion/bitcoins"
+				title="Dolar Crypto"
+				compra={data[5].compra}
+				venta={data[5].venta}				
+			/>
+		</ul>
+		<p class="text-center p-10 text-sm text-gray-500">
+			Ultima vez actualizado: {outputDateString}
+		</p>
+	</main>
+</Layout>
+
+<style>	
+	.text-gradient {
+		background-image: var(--accent-gradient);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-size: 400%;
+		background-position: 0%;
+	}
+
+	.link-card-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
+		gap: 2rem;
+		padding: 0;
+	}
+</style>
